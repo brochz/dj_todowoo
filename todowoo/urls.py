@@ -19,7 +19,12 @@ import todo.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # sign up page
+    
     path("signup/", todo.views.signupuser, name="signupuser"),
+    path("logout/", todo.views.logoutuser, name="logoutuser"),
+    path("login/", todo.views.loginuser, name="loginuser"),
+
+    path("", todo.views.home, name="home"),
+
     path("current/", todo.views.currenttodos, name="currenttodos"),
 ]
