@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.contrib.auth import login, logout, authenticate
 
-# https://learning.oreilly.com/videos/django-3/9781801818148/9781801818148-video7_7/
+# https://learning.oreilly.com/videos/django-3/9781801818148/9781801818148-video7_9/
 # Create your views here.
 def signupuser(request):
     if request.method == "GET":
