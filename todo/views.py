@@ -4,8 +4,8 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.contrib.auth import login, logout, authenticate
-
-# https://learning.oreilly.com/videos/django-3/9781801818148/9781801818148-video7_10/
+from .models import Todo
+# https://learning.oreilly.com/videos/django-3/9781801818148/9781801818148-video7_12/
 # Create your views here.
 def signupuser(request):
     if request.method == "GET":
@@ -24,7 +24,8 @@ def signupuser(request):
 
 
 def currenttodos(request):
-    return render(request, "currenttodos.html") 
+    todos = Todo.objects.filter(user=request.user, datacompleted__isnull=True)
+    return render(request, "currenttodos.html", {"todos": todos})
 
 
 def logoutuser(request):

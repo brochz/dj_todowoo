@@ -2,6 +2,12 @@
 
 {% block content %}
 
-<h1>current</h1>
+<h1>Current Todos</h1>
+
+<ul>
+{% for todo in todos %}
+ <li {% if todo.important %} style="color:red" {% endif %}>{{todo.title}} : {{todo.memo}}</li>
+
+{% endfor %}
 
 {% endblock %}

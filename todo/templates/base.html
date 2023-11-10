@@ -9,6 +9,10 @@
     <a href="{% url 'signupuser' %}">Sign Up</a> <a href="{% url 'loginuser' %}">Login</a>
 {% endif %}
 
+
+<a href="{% url 'currenttodos' %}">Current Todos</a>
+<a href="{% url 'createtodo' %}">Create Todo</a>
+
 {% block content %}
 
 {% endblock %}
