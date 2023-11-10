@@ -46,7 +46,41 @@ def loginuser(request):
             return redirect("currenttodos")
 
 
+from .forms import TodoForm
+
+def createtodo(request):
+    """
+    View function that handles creation of a new todo item.
+
+    If the request method is GET, it renders the createtodo.html template with an empty TodoForm.
+    If the request method is POST, it validates the form data and saves the new todo item to the database.
+
+    Returns:
+        If the request method is GET, it returns a rendered HTML template.
+        If the request method is POST and the form data is valid, it redirects to the currenttodos view.
+        If the request method is POST and the form data is invalid, it returns a rendered HTML template with an error message.
+    """
+    if request.method == "GET":
+        # Render the createtodo.html template with an empty TodoForm
+        return render(request, "createtodo.html", {"form": TodoForm()})
+    else:
+
+        try:
+ 
+            # Validate the form data
+            form = TodoForm(request.POST)
+
+
+            # Save the form to  the database
+            newtodo = form.save(commit=False)
+            newtodo.user = request.user
+            newtodo.save()
+            # Redirect to the currenttodos view
+            return redirect("currenttodos")
+        except ValueError as e:
+            # Return a rendered HTML template with an error message
+            return render(request, "createtodo.html", {"form": TodoForm(), "error": "Bad data passed in. Try again."})  
+
 def home(request):
     return render(request, "home.html")
-
 

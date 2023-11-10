@@ -26,5 +26,7 @@ urlpatterns = [
 
     path("", todo.views.home, name="home"),
 
+    path("create/", todo.views.createtodo, name="createtodo"),
+
     path("current/", todo.views.currenttodos, name="currenttodos"),
 ]
