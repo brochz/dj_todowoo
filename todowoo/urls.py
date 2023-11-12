@@ -29,4 +29,12 @@ urlpatterns = [
     path("create/", todo.views.createtodo, name="createtodo"),
 
     path("current/", todo.views.currenttodos, name="currenttodos"),
+    path("complete/", todo.views.completetodos, name="completetodos"),
+
+
+    path("todo/<int:todo_pk>", todo.views.viewtodo, name="viewtodo"),
+
+    path("completetodo/<int:todo_pk>/complete", todo.views.completetodo, name="completetodo"),
+    path("deletetodo/<int:todo_pk>/delete", todo.views.deletetodo, name="deletetodo"
+         )
 ]

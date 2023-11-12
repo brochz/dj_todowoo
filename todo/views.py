@@ -1,10 +1,12 @@
-from django.shortcuts import render, redirect
+from django.utils import timezone
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.contrib.auth import login, logout, authenticate
 from .models import Todo
+from django.contrib.auth.decorators import login_required
 # https://learning.oreilly.com/videos/django-3/9781801818148/9781801818148-video7_12/
 # Create your views here.
 def signupuser(request):
@@ -28,6 +30,14 @@ def currenttodos(request):
     return render(request, "currenttodos.html", {"todos": todos})
 
 
+def completetodos(request):
+    todos = Todo.objects.filter(user=request.user, datacompleted__isnull=False).order_by("-datacompleted")
+    return render(request, "completetodos.html", {"todos": todos})
+
+
+
+
+
 def logoutuser(request):
     if request.method == "POST":
         logout(request)
@@ -49,6 +59,8 @@ def loginuser(request):
 
 from .forms import TodoForm
 
+
+@login_required
 def createtodo(request):
     """
     View function that handles creation of a new todo item.
@@ -85,3 +97,30 @@ def createtodo(request):
 def home(request):
     return render(request, "home.html")
 
+def viewtodo(request, todo_pk):
+    todo = get_object_or_404(Todo, pk=todo_pk, user=request.user)
+    if request.method == "GET":
+        form = TodoForm(instance=todo)
+        return render(request, "viewtodo.html", {"todo": todo, "form": form})    
+    else:
+        try:
+            form = TodoForm(request.POST, instance=todo)
+            form.save()
+            return  redirect("viewtodo", todo_pk=todo_pk)    
+        except ValueError:
+            return render(request, "viewtodo.html", {"todo": todo, "form": form, "error": "Bad info"})
+        
+
+def completetodo(request, todo_pk):
+    todo = get_object_or_404(Todo, pk=todo_pk, user=request.user)
+    if request.method == "POST":
+        todo.datacompleted = timezone.now()
+        todo.save()
+        return redirect("currenttodos")
+    
+
+def deletetodo(request, todo_pk):
+    todo = get_object_or_404(Todo, pk=todo_pk, user=request.user)
+    if request.method == "POST":
+        todo.delete()
+        return redirect("currenttodos")
